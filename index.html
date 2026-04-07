@@ -3,268 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BSS Business Group</title>
+  <title>BSS Business Group v1.0.0</title>
   <style>
-    :root { --wa-dark: #0b141a; --wa-teal: #00a884; --wa-bubble: #202c33; --wa-text: #e9edef; }
-    body { background: var(--wa-dark); color: var(--wa-text); font-family: sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
-    .header { background: #202c33; padding: 15px; border-bottom: 1px solid #313d45; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
-    .node-icon { width: 40px; height: 40px; background: var(--wa-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
-    .container { padding: 15px; }
-    .app-section { display: none; min-height: 80vh; }
-    #home { display: block; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-    .card { background: var(--wa-bubble); padding: 25px 10px; border-radius: 12px; text-align: center; border: 1px solid #313d45; cursor: pointer; transition: 0.3s; }
-    .card:active { background: #2a3942; transform: scale(0.95); }
-    input, select { width: 100%; padding: 16px; margin: 8px 0; border-radius: 10px; border: none; background: #2a3942; color: white; box-sizing: border-box; font-size: 16px; }
-    .btn-bss { background: var(--wa-teal); color: #0b141a; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    .msg-received { background: var(--wa-bubble); padding: 15px; border-radius: 0 12px 12px 12px; margin: 10px 0; border-left: 4px solid var(--wa-teal); white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
-    .nav { position: fixed; bottom: 0; width: 100%; background: #202c33; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #313d45; z-index: 1000; }
-    .nav-item { text-align: center; font-size: 11px; color: #8696a0; flex: 1; cursor: pointer; }
-    .nav-item.active { color: var(--wa-teal); }
-    .typing { color: var(--wa-teal); font-size: 12px; font-style: italic; margin: 5px; }
+    :root {
+      --bg-dark: #0b141a;
+      --teal: #00a884;
+      --bubble: #202c33;
+      --text: #e9edef;
+    }
+    body { background: var(--bg-dark); color: var(--text); font-family: sans-serif; margin:0; padding-bottom:80px; }
+    .header { background: var(--bubble); padding:15px; border-bottom:1px solid #313d45; text-align:center; }
+    .header h1 { margin:0; font-size:18px; }
+    .status { font-size:12px; color:#00a884; margin-top:5px; }
+    .container { padding:15px; }
+    .btn { display:block; width:100%; padding:15px; margin:10px 0; border:none; border-radius:8px; font-weight:bold; cursor:pointer; }
+    .btn-green { background:var(--teal); color:#0b141a; }
+    .card { background:var(--bubble); padding:15px; border-radius:10px; margin:10px 0; border:1px solid #313d45; }
+    .nav { position:fixed; bottom:0; width:100%; background:var(--bubble); display:flex; justify-content:space-around; padding:10px 0; border-top:1px solid #313d45; }
+    .nav-item { text-align:center; font-size:12px; color:#8696a0; flex:1; cursor:pointer; }
+    .nav-item.active { color:var(--teal); }
+    .section { display:none; min-height:70vh; }
+    #home { display:block; }
   </style>
 </head>
 <body>
   <div class="header">
-    <div class="node-icon">B</div>
-    <div><strong>BSS Business Group</strong><br><small>⚪ Guest Mode | Active v1.3.0</small></div>
+    <h1>🛡️ BSS Business Group v1.0.0 — Marketplace Platform</h1>
+    <div class="status">SYSTEM ONLINE — PROMO MODE ACTIVE (Registration Fees: OFF)</div>
   </div>
 
   <div class="container">
-    <div id="home" class="app-section">
-      <div class="msg-received"><strong>Run as a guest. Waiting for input...</strong><br>Welcome to the Marketplace Node. Select a card to begin.</div>
-      <div class="grid">
-        <div class="card" onclick="showSection('search')">🔍<br>1. SEARCH</div>
-        <div class="card" onclick="showSection('reg')">📝<br>2. REGISTER</div>
-        <div class="card" onclick="showSection('login')">🔑<br>3. LOGIN</div>
-        <div class="card" onclick="alert('Master Node: +234 811 842 8191')">⚙️<br>4. SUPPORT</div>
-      </div>
+    <!-- HOME -->
+    <div id="home" class="section">
+      <button class="btn btn-green" onclick="showSection('register')">Register Free</button>
+      <button class="btn btn-green" onclick="showSection('login')">Sign In</button>
+      <div class="card"><b>Marketplace</b><br>Browse & post product listings. Filter by category, search by name.</div>
+      <div class="card"><b>AI Assistant</b><br>Get instant help from our Gemini-powered marketplace advisor.</div>
     </div>
 
-    <div id="search" class="app-section">
-      <h3>Market Search</h3>
-      <input type="text" id="searchBox" placeholder="Type product (e.g. Broilers)...">
-      <button class="btn-bss" onclick="runBSSSearch()">QUERY ENGINE</button>
-      <div id="searchResult"></div>
-    </div>
-
-    <div id="reg" class="app-section">
+    <!-- REGISTER -->
+    <div id="register" class="section">
       <h3>Join BSS Network</h3>
-      <form onsubmit="registerBSS(event)">
+      <form onsubmit="registerUser(event)">
         <input type="text" id="rName" placeholder="Full Name" required>
         <input type="tel" id="rPhone" placeholder="WhatsApp Number" required>
         <select id="rRole">
           <option value="buyer">Buyer (Blue)</option>
           <option value="seller">Seller (Green)</option>
         </select>
-        <button type="submit" id="regBtn" class="btn-bss">SUBMIT FOR VERIFICATION</button>
+        <button type="submit" class="btn btn-green">Submit for Verification</button>
       </form>
     </div>
 
-    <div id="login" class="app-section">
+    <!-- LOGIN -->
+    <div id="login" class="section">
       <h3>Secure Gateway</h3>
       <input type="tel" id="loginUser" placeholder="Phone Number">
       <input type="password" id="loginPass" placeholder="Vault Access Code">
-      <button id="authBtn" class="btn-bss" onclick="authenticate()">AUTHENTICATE</button>
+      <button class="btn btn-green" onclick="authenticate()">Authenticate</button>
     </div>
 
-    <div id="admin-dash" class="app-section">
-      <h3 style="color:#ff2e2e">Master Node Control</h3>
-      <div class="grid">
-        <div class="card">✅<br>Verify Users</div>
-        <div class="card">💰<br>Ad Fees</div>
-        <div class="card">📊<br>Market Stats</div>
-        <div class="card" onclick="location.reload()">🔒<br>Logout</div>
-      </div>
-      <div class="msg-received">System Handshake: **bss_bizgroup** Cloud Linked.</div>
-    </div>
-  </div>
-
-  <div class="nav">
-    <div class="nav-item" onclick="showSection('home')">🏠<br>Home</div>
-    <div class="nav-item" onclick="showSection('search')">🔍<br>Search</div>
-    <div class="nav-item" onclick="showSection('reg')">📝<br>Register</div>
-  </div>
-
-  <script>
-    let guestViews = 0;
-    function showSection(id) {
-      if (guestViews >= 5 && !['reg','home','login'].includes(id)) {
-        alert("LOCK: REGISTER TO JOIN CONVERSATION");
-        id = 'reg';
-      }
-      document.querySelectorAll('.app-section').forEach(s => s.style.display = 'none');
-      const target = document.getElementById(id);
-      if(target) target.style.display = 'block';
-      window.scrollTo(0,0);
-    }
-    function runBSSSearch() {
-      const q = document.getElementById("searchBox").value;
-      const res = document.getElementById("searchResult");
-      if(!q) return;
-      guestViews++;
-      res.innerHTML = "<div class='typing'>BSS Engine querying cloud...</div>";
-      // Placeholder response
-      setTimeout(() => {
-        res.innerHTML = `<div class="msg-received">Result for "${q}": Bemagro Farms recommended 🐥</div>`;
-      }, 1000);
-    }
-    function registerBSS(e) {
-      if(e) e.preventDefault();
-      const btn = document.getElementById("regBtn");
-      btn.innerText = "SYNCING...";
-      setTimeout(() => {
-        alert("✅ SUCCESS: Data mirrored to bss_bizgroup.");
-        showSection('home');
-        btn.innerText = "SUBMIT FOR VERIFICATION";
-      }, 1000);
-    }
-    function authenticate() {
-      const user = document.getElementById("loginUser").value;
-      const pass = document.getElementById("loginPass").value;
-      if(!user || !pass) return alert("Please fill all fields.");
-      if(user === "08118428191" && pass === "mastercode") {
-        alert("🔴 MASTER NODE ACCESS GRANTED");
-        showSection('admin-dash');
-      } else {
-        alert("❌ INVALID ACCESS");
-      }
-    }
-  </script>
-</body>
-</Here’s a **ready‑to‑paste `index.html` file** you can drop directly into your GitHub repo. Once you enable **GitHub Pages** in your repo settings, this will serve as the live app view link.  
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BSS Business Group</title>
-  <style>
-    :root { --wa-dark: #0b141a; --wa-teal: #00a884; --wa-bubble: #202c33; --wa-text: #e9edef; }
-    body { background: var(--wa-dark); color: var(--wa-text); font-family: sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
-    .header { background: #202c33; padding: 15px; border-bottom: 1px solid #313d45; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
-    .node-icon { width: 40px; height: 40px; background: var(--wa-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
-    .container { padding: 15px; }
-    .app-section { display: none; min-height: 80vh; }
-    #home { display: block; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-    .card { background: var(--wa-bubble); padding: 25px 10px; border-radius: 12px; text-align: center; border: 1px solid #313d45; cursor: pointer; transition: 0.3s; }
-    .card:active { background: #2a3942; transform: scale(0.95); }
-    input, select { width: 100%; padding: 16px; margin: 8px 0; border-radius: 10px; border: none; background: #2a3942; color: white; box-sizing: border-box; font-size: 16px; }
-    .btn-bss { background: var(--wa-teal); color: #0b141a; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-    .msg-received { background: var(--wa-bubble); padding: 15px; border-radius: 0 12px 12px 12px; margin: 10px 0; border-left: 4px solid var(--wa-teal); white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
-    .nav { position: fixed; bottom: 0; width: 100%; background: #202c33; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #313d45; z-index: 1000; }
-    .nav-item { text-align: center; font-size: 11px; color: #8696a0; flex: 1; cursor: pointer; }
-    .nav-item.active { color: var(--wa-teal); }
-    .typing { color: var(--wa-teal); font-size: 12px; font-style: italic; margin: 5px; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <div class="node-icon">B</div>
-    <div><strong>BSS Business Group</strong><br><small>⚪ Guest Mode | Active v1.3.0</small></div>
-  </div>
-
-  <div class="container">
-    <div id="home" class="app-section">
-      <div class="msg-received"><strong>Run as a guest. Waiting for input...</strong><br>Welcome to the Marketplace Node. Select a card to begin.</div>
-      <div class="grid">
-        <div class="card" onclick="showSection('search')">🔍<br>1. SEARCH</div>
-        <div class="card" onclick="showSection('reg')">📝<br>2. REGISTER</div>
-        <div class="card" onclick="showSection('login')">🔑<br>3. LOGIN</div>
-        <div class="card" onclick="alert('Master Node: +234 811 842 8191')">⚙️<br>4. SUPPORT</div>
-      </div>
+    <!-- MARKETPLACE -->
+    <div id="market" class="section">
+      <h3>BSS Marketplace</h3>
+      <div class="card">📦 No active listings yet. Click refresh to update.</div>
+      <button class="btn btn-green" onclick="alert('Refreshing feed...')">Refresh Feed</button>
     </div>
 
-    <div id="search" class="app-section">
-      <h3>Market Search</h3>
-      <input type="text" id="searchBox" placeholder="Type product (e.g. Broilers)...">
-      <button class="btn-bss" onclick="runBSSSearch()">QUERY ENGINE</button>
+    <!-- AI CHAT -->
+    <div id="chat" class="section">
+      <h3>AI Assistant</h3>
+      <input type="text" id="searchBox" placeholder="Ask about products...">
+      <button class="btn btn-green" onclick="runSearch()">Query Engine</button>
       <div id="searchResult"></div>
     </div>
 
-    <div id="reg" class="app-section">
-      <h3>Join BSS Network</h3>
-      <form onsubmit="registerBSS(event)">
-        <input type="text" id="rName" placeholder="Full Name" required>
-        <input type="tel" id="rPhone" placeholder="WhatsApp Number" required>
-        <select id="rRole">
-          <option value="buyer">Buyer (Blue)</option>
-          <option value="seller">Seller (Green)</option>
-        </select>
-        <button type="submit" id="regBtn" class="btn-bss">SUBMIT FOR VERIFICATION</button>
-      </form>
-    </div>
-
-    <div id="login" class="app-section">
-      <h3>Secure Gateway</h3>
-      <input type="tel" id="loginUser" placeholder="Phone Number">
-      <input type="password" id="loginPass" placeholder="Vault Access Code">
-      <button id="authBtn" class="btn-bss" onclick="authenticate()">AUTHENTICATE</button>
-    </div>
-
-    <div id="admin-dash" class="app-section">
-      <h3 style="color:#ff2e2e">Master Node Control</h3>
-      <div class="grid">
-        <div class="card">✅<br>Verify Users</div>
-        <div class="card">💰<br>Ad Fees</div>
-        <div class="card">📊<br>Market Stats</div>
-        <div class="card" onclick="location.reload()">🔒<br>Logout</div>
-      </div>
-      <div class="msg-received">System Handshake: **bss_bizgroup** Cloud Linked.</div>
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="section">
+      <h3 style="color:#ff2e2e">Master Dashboard</h3>
+      <div class="card">✅ Verify Users</div>
+      <div class="card">💰 Ad Fees</div>
+      <div class="card">📊 Market Stats</div>
+      <div class="card" onclick="location.reload()">🔒 Logout</div>
     </div>
   </div>
 
+  <!-- NAVIGATION -->
   <div class="nav">
-    <div class="nav-item" onclick="showSection('home')">🏠<br>Home</div>
-    <div class="nav-item" onclick="showSection('search')">🔍<br>Search</div>
-    <div class="nav-item" onclick="showSection('reg')">📝<br>Register</div>
+    <div class="nav-item active" onclick="showSection('home')">🏠<br>Home</div>
+    <div class="nav-item" onclick="showSection('market')">🛒<br>Market</div>
+    <div class="nav-item" onclick="showSection('chat')">🤖<br>AI Chat</div>
+    <div class="nav-item" onclick="showSection('dashboard')">📊<br>Dashboard</div>
   </div>
 
   <script>
-    let guestViews = 0;
     function showSection(id) {
-      if (guestViews >= 5 && !['reg','home','login'].includes(id)) {
-        alert("LOCK: REGISTER TO JOIN CONVERSATION");
-        id = 'reg';
-      }
-      document.querySelectorAll('.app-section').forEach(s => s.style.display = 'none');
-      const target = document.getElementById(id);
-      if(target) target.style.display = 'block';
+      document.querySelectorAll('.section').forEach(s => s.style.display='none');
+      document.getElementById(id).style.display='block';
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelector(`.nav-item[onclick="showSection('${id}')"]`)?.classList.add('active');
       window.scrollTo(0,0);
     }
-    function runBSSSearch() {
-      const q = document.getElementById("searchBox").value;
-      const res = document.getElementById("searchResult");
-      if(!q) return;
-      guestViews++;
-      res.innerHTML = "<div class='typing'>BSS Engine querying cloud...</div>";
-      setTimeout(() => {
-        res.innerHTML = `<div class="msg-received">Result for "${q}": Bemagro Farms recommended 🐥</div>`;
-      }, 1000);
+    function registerUser(e){
+      e.preventDefault();
+      alert("✅ Registration submitted. Pending verification.");
+      showSection('home');
     }
-    function registerBSS(e) {
-      if(e) e.preventDefault();
-      const btn = document.getElementById("regBtn");
-      btn.innerText = "SYNCING...";
-      setTimeout(() => {
-        alert("✅ SUCCESS: Data mirrored to bss_bizgroup.");
-        showSection('home');
-        btn.innerText = "SUBMIT FOR VERIFICATION";
-      }, 1000);
-    }
-    function authenticate() {
-      const user = document.getElementById("loginUser").value;
-      const pass = document.getElementById("loginPass").value;
-      if(!user || !pass) return alert("Please fill all fields.");
-      if(user === "08118428191" && pass === "mastercode") {
-        alert("🔴 MASTER NODE ACCESS GRANTED");
-        showSection('admin-dash');
+    function authenticate(){
+      const user=document.getElementById("loginUser").value;
+      const pass=document.getElementById("loginPass").value;
+      if(user==="08118428191" && pass==="mastercode"){
+        alert("🔴 Master Node Access Granted");
+        showSection('dashboard');
       } else {
-        alert("❌ INVALID ACCESS");
+        alert("❌ Invalid Access");
       }
+    }
+    function runSearch(){
+      const q=document.getElementById("searchBox").value;
+      const res=document.getElementById("searchResult");
+      if(!q) return;
+      res.innerHTML="<div class='card'>Searching cloud...</div>";
+      setTimeout(()=>{res.innerHTML=`<div class='card'>Result for "${q}": Bemagro Farms recommended 🐥</div>`;},1000);
     }
   </script>
 </body>
