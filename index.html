@@ -2,193 +2,166 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BSS BizGroup App</title>
+  <title>BSS Business Group | Master Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /* --- Global Styles --- */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f6f9;
-      color: #333;
-    }
-    header {
-      background: #2c3e50;
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      background: #34495e;
-    }
-    nav button {
-      background: none;
-      border: none;
-      color: #fff;
-      padding: 1rem;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    nav button:hover {
-      background: #2c3e50;
-    }
-    section {
-      display: none;
-      padding: 2rem;
-    }
-    section.active {
-      display: block;
-    }
-    .card {
-      background: #fff;
-      border-radius: 6px;
-      padding: 1rem;
-      margin: 1rem 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    form input, form select, form button {
-      display: block;
-      width: 100%;
-      margin: 0.5rem 0;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
-    form button {
-      background: #27ae60;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    form button:hover {
-      background: #219150;
-    }
+    /* ... (Keep your existing CSS, it's perfect) ... */
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f9; color: #333; }
+    header { background: #000; color: #fff; padding: 1rem; text-align: center; border-bottom: 4px solid #b71c1c; }
+    nav { display: flex; justify-content: center; background: #333; position: sticky; top: 0; }
+    nav button { background: none; border: none; color: #fff; padding: 1rem; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
+    nav button:hover { background: #b71c1c; }
+    section { display: none; padding: 2rem; max-width: 800px; margin: auto; }
+    section.active { display: block; }
+    .card { background: #fff; border-radius: 6px; padding: 1rem; margin: 1rem 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border-left: 5px solid #27ae60; }
+    form input, form select, form button { display: block; width: 100%; margin: 0.5rem 0; padding: 0.7rem; font-size: 1rem; box-sizing: border-box; }
+    form button { background: #27ae60; color: #fff; border: none; cursor: pointer; font-weight: bold; }
   </style>
 </head>
 <body>
   <header>
-    <h1>BSS BizGroup</h1>
-    <p>Marketplace & Registration Portal</p>
+    <h1>🛡️ BSS Business Group</h1>
+    <p>Architect: Taiwo Fashola | +234 811 842 8191</p>
   </header>
+  
   <nav>
-    <button onclick="showSection('home')">Home</button>
-    <button onclick="showSection('register')">Register</button>
-    <button onclick="showSection('login')">Login</button>
-    <button onclick="showSection('marketplace')">Marketplace</button>
-    <button onclick="showSection('dashboard')">Dashboard</button>
+    <button onclick="showSection('home')">HOME</button>
+    <button onclick="showSection('register')">REGISTER</button>
+    <button onclick="showSection('login')">LOGIN</button>
+    <button onclick="showSection('marketplace')">MARKET</button>
+    <button onclick="showSection('dashboard')">STATS</button>
   </nav>
 
-  <!-- Home -->
   <section id="home" class="active">
     <div class="card">
-      <h2>Welcome to BSS BizGroup</h2>
-      <p>Connect buyers and sellers in one place.</p>
+      <h2>Welcome to BSS Business Group</h2>
+      <p>System connected to <b>bss_bizgroup</b> database.</p>
     </div>
   </section>
 
-  <!-- Registration -->
   <section id="register">
-    <h2>Register</h2>
-    <form onsubmit="registerUser(event)">
+    <h2>Seller/Buyer Registration</h2>
+    <form id="regForm">
       <input id="rName" type="text" placeholder="Full Name" required>
       <input id="rPhone" type="text" placeholder="Phone Number" required>
       <select id="rRole">
         <option value="buyer">Buyer</option>
         <option value="seller">Seller</option>
       </select>
-      <button type="submit">Submit</button>
+      <button type="submit">Submit Registration</button>
     </form>
   </section>
 
-  <!-- Login -->
   <section id="login">
-    <h2>Login</h2>
-    <form onsubmit="authenticate(event)">
+    <h2>System Authentication</h2>
+    <form id="loginForm">
       <input id="loginUser" type="text" placeholder="Phone Number" required>
       <input id="loginPass" type="password" placeholder="Access Code" required>
-      <button type="submit">Login</button>
+      <button type="submit">Access Node</button>
     </form>
   </section>
 
-  <!-- Marketplace -->
   <section id="marketplace">
-    <h2>Marketplace Listings</h2>
-    <div id="marketListings"></div>
+    <h2>BSS Live Marketplace</h2>
+    <div id="marketListings">Loading inventory...</div>
   </section>
 
-  <!-- Dashboard -->
   <section id="dashboard">
-    <h2>Dashboard</h2>
-    <div id="dashboardStats"></div>
+    <h2>Admin Analytics</h2>
+    <div id="dashboardStats">Loading stats...</div>
   </section>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <script>
+    // ✅ REPLACE WITH YOUR ACTUAL DEPLOYED API URL (e.g., from Render or Replit)
+    const API_URL = "https://bss-bizgroup-api.your-hosting.com"; 
 
-    // 🔑 Replace with your Firebase project config
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "bss-bizgroup.firebaseapp.com",
-      projectId: "bss-bizgroup",
-      storageBucket: "bss-bizgroup.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Navigation
+    // --- 1. Navigation Logic ---
     function showSection(id) {
       document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
       document.getElementById(id).classList.add("active");
+      
+      if (id === 'marketplace') loadMarketplace();
+      if (id === 'dashboard') loadDashboard();
     }
 
-    // Registration
-    async function registerUser(e) {
+    // --- 2. Registration Logic (API Call) ---
+    document.getElementById('regForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      await addDoc(collection(db, "bss_registrations"), {
+      const payload = {
         name: document.getElementById("rName").value,
         phone: document.getElementById("rPhone").value,
-        role: document.getElementById("rRole").value,
-        status: "pending",
-        created_at: new Date()
-      });
-      alert("✅ Registration saved to Firebase.");
-      showSection("home");
-    }
+        role: document.getElementById("rRole").value
+      };
 
-    // Login (simple demo)
-    async function authenticate(e) {
+      try {
+        const response = await fetch(`${API_URL}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert(`✅ Registration Successful! ID: ${result.id}`);
+          showSection('home');
+        }
+      } catch (err) {
+        alert("❌ API Error: Ensure your server is running.");
+      }
+    });
+
+    // --- 3. Login Logic (API Call) ---
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const user = document.getElementById("loginUser").value;
-      const pass = document.getElementById("loginPass").value;
-      if (user === "08118428191" && pass === "mastercode") {
-        alert("🔴 Master Node Access Granted");
-        showSection("dashboard");
-        loadDashboard();
-      } else {
-        alert("❌ Invalid credentials");
+      const payload = {
+        phone: document.getElementById("loginUser").value,
+        access_code: document.getElementById("loginPass").value
+      };
+
+      try {
+        const response = await fetch(`${API_URL}/api/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (result.authenticated) {
+          alert(`🔴 Welcome, ${result.role}`);
+          showSection('dashboard');
+        } else {
+          alert("❌ Access Denied");
+        }
+      } catch (err) {
+        alert("❌ Auth Server Offline");
+      }
+    });
+
+    // --- 4. Marketplace & Dashboard Loaders ---
+    async function loadMarketplace() {
+      try {
+        const res = await fetch(`${API_URL}/api/marketplace`);
+        const listings = await res.json();
+        document.getElementById("marketListings").innerHTML = listings.map(item => `
+          <div class="card">
+            <strong>📦 ${item.name}</strong><br>
+            Quantity: ${item.quantity} | Seller: ${item.seller}
+          </div>
+        `).join("");
+      } catch (err) {
+        document.getElementById("marketListings").innerText = "Failed to load market data.";
       }
     }
 
-    // Marketplace
-    async function loadMarketplace() {
-      const snapshot = await getDocs(collection(db, "marketplace"));
-      const listings = snapshot.docs.map(doc => doc.data());
-      document.getElementById("marketListings").innerHTML =
-        listings.map(item => `<div class="card">📦 ${item.name} — ${item.quantity} units</div>`).join("");
-    }
-
-    // Dashboard
     async function loadDashboard() {
-      const snapshot = await getDocs(collection(db, "bss_registrations"));
-      const users = snapshot.size;
-      document.getElementById("dashboardStats").innerHTML =
-        `<div class="card">Users: ${users}</div>`;
+      try {
+        const res = await fetch(`${API_URL}/api/dashboard`);
+        const stats = await res.json();
+        document.getElementById("dashboardStats").innerHTML = `
+          <div class="card">👥 Total Users: ${stats.users}</div>
+          <div class="card">💰 Transactions: ${stats.transactions}</div>
+        `;
+      } catch (err) {
+        document.getElementById("dashboardStats").innerText = "Failed to load stats.";
+      }
     }
   </script>
 </body>
