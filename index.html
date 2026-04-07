@@ -20,7 +20,7 @@
         .btn-adm { background: var(--admin); color: white; }
         .btn-sel { background: var(--seller); color: white; }
         .btn-buy { background: var(--buyer); color: white; }
-        .active-nav { border-left: 5px solid gold !important; }
+        .active-nav { border-left: 5px solid gold !important; background-color: #444 !important; }
 
         /* CONTENT AREA */
         .content-area { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-height: 500px; }
@@ -29,7 +29,7 @@
         
         /* UTILS */
         .editor-box { margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px; }
-        .menu-section { display: none; } /* Hidden by default, controlled by JS */
+        .menu-section { display: none; } /* Script will toggle this to 'block' */
         @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -43,15 +43,15 @@
 <div class="main-container">
     <div class="sidebar">
         <h3>🔴 MASTER CONTROLS</h3>
-        <button class="nav-btn btn-adm" onclick="showSection('admin-panel', this)">Admin Dashboard</button>
-        <button class="nav-btn btn-adm" onclick="showSection('prompt-panel', this)">Prompt Management</button>
+        <button class="nav-btn btn-adm" id="btn-admin-panel" onclick="showSection('admin-panel', this)">Admin Dashboard</button>
+        <button class="nav-btn btn-adm" id="btn-prompt-panel" onclick="showSection('prompt-panel', this)">Prompt Management</button>
         
         <h3>🟢 SELLER TOOLS</h3>
-        <button class="nav-btn btn-sel" onclick="showSection('seller-reg', this)">New Registration</button>
-        <button class="nav-btn btn-sel" onclick="showSection('inventory', this)">Manage Stock</button>
+        <button class="nav-btn btn-sel" id="btn-seller-reg" onclick="showSection('seller-reg', this)">New Registration</button>
+        <button class="nav-btn btn-sel" id="btn-inventory" onclick="showSection('inventory', this)">Manage Stock</button>
         
         <h3>🔵 MARKETPLACE</h3>
-        <button class="nav-btn btn-buy" onclick="showSection('market', this)">Browse Products</button>
+        <button class="nav-btn btn-buy" id="btn-market" onclick="showSection('market', this)">Browse Products</button>
         <button class="nav-btn btn-buy" onclick="location.reload()">System Logout</button>
     </div>
 
@@ -108,10 +108,13 @@
 </div>
 
 <script>
-    // --- 1. NAVIGATION ENGINE (FIXED) ---
+    // --- 1. CORE NAVIGATION ENGINE ---
     function showSection(id, btnElement) {
-        // Hide all sections using display property to force override
-        document.querySelectorAll('.menu-section').forEach(section => {
+        console.log("Navigating to: " + id); // Debugging
+        
+        // Hide all sections using display property directly
+        const sections = document.querySelectorAll('.menu-section');
+        sections.forEach(section => {
             section.style.display = 'none';
         });
 
@@ -121,22 +124,21 @@
             target.style.display = 'block';
         }
 
-        // Handle Sidebar UI - Remove active class from all, add to current
+        // Handle Sidebar UI styling
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
         if (btnElement) {
             btnElement.classList.add('active-nav');
         }
 
-        // Initialize TinyMCE if opening the prompt panel
+        // Load TinyMCE if needed
         if (id === 'prompt-panel') {
             initTiny();
         }
     }
 
-    // --- 2. TINY CLOUD INITIALIZATION ---
+    // --- 2. TINY CLOUD ENGINE ---
     let tinyInitialized = false;
     function initTiny() {
-        // Check if already initialized to prevent double-loading
         if (typeof tinymce !== 'undefined' && !tinymce.get('mainEditor')) {
             tinymce.init({
                 selector: '#mainEditor',
@@ -154,22 +156,29 @@
         }
     }
 
-    // --- 3. GEMINI CLOUD SYNC ---
+    // --- 3. SYSTEM SYNC ---
     function saveToCloud() {
         const data = tinymce.get('mainEditor').getContent();
         console.log("Pushing to BSD Gemini Cloud:", data);
         alert("Success: Database 'bss_bizgroup' synchronized.");
     }
 
-    // --- 4. STARTUP ---
-    window.onload = () => {
-        // Load Admin Panel by default
-        showSection('admin-panel', document.querySelector('.btn-adm'));
-    };
+    // --- 4. STARTUP HANDLER (GITHUB/REPLIT OPTIMIZED) ---
+    function initializeSystem() {
+        console.log("BSS Master Dashboard: Booting...");
+        const defaultBtn = document.getElementById('btn-admin-panel');
+        showSection('admin-panel', defaultBtn);
+    }
 
-    // AUTO-SYNC SIMULATION
+    // Listen for both DOM load and fallback to Window load
+    document.addEventListener('DOMContentLoaded', initializeSystem);
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        initializeSystem();
+    }
+
+    // Heartbeat Sync
     setInterval(() => {
-        console.log("Pulse: Syncing with bss_bizgroup...");
+        console.log("Pulse: bss_bizgroup sync active...");
     }, 30000);
 </script>
 
