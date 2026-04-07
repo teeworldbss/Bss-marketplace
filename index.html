@@ -1,186 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BSS BUSINESS GROUP | Master Dashboard</title>
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-    <style>
-        :root { --admin: #b71c1c; --seller: #1b5e20; --buyer: #0d47a1; --bg: #e0e0e0; }
-        body { font-family: 'Arial', sans-serif; margin: 0; background: var(--bg); color: #333; }
-        .header { background: #000; color: #fff; padding: 20px; text-align: center; border-bottom: 5px solid var(--admin); }
-        .dev-info { font-size: 12px; color: #ffeb3b; margin-top: 5px; }
-        .main-container { max-width: 1000px; margin: 20px auto; display: grid; grid-template-columns: 300px 1fr; gap: 20px; padding: 0 15px; }
-        
-        /* SIDEBAR NAVIGATION */
-        .sidebar { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); height: fit-content; }
-        .sidebar h3 { border-bottom: 2px solid #ddd; padding-bottom: 10px; font-size: 16px; }
-        .nav-btn { display: block; width: 100%; padding: 12px; margin-bottom: 8px; border: none; border-radius: 4px; text-align: left; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .nav-btn:hover { opacity: 0.8; transform: translateX(5px); }
-        .btn-adm { background: var(--admin); color: white; }
-        .btn-sel { background: var(--seller); color: white; }
-        .btn-buy { background: var(--buyer); color: white; }
-        .active-nav { border-left: 5px solid gold !important; background-color: #444 !important; }
-
-        /* CONTENT AREA */
-        .content-area { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-height: 500px; }
-        .status-bar { display: flex; justify-content: space-between; background: #333; color: #fff; padding: 10px 15px; border-radius: 5px; margin-bottom: 20px; font-size: 13px; }
-        .active-dot { height: 10px; width: 10px; background: #4caf50; border-radius: 50%; display: inline-block; margin-right: 5px; }
-        
-        /* UTILS */
-        .editor-box { margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px; }
-        .menu-section { display: none; } /* Script will toggle this to 'block' */
-        @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BSS Business Group</title>
+  <style>
+    :root { --wa-dark: #0b141a; --wa-teal: #00a884; --wa-bubble: #202c33; --wa-text: #e9edef; }
+    body { background: var(--wa-dark); color: var(--wa-text); font-family: sans-serif; margin: 0; padding-bottom: 80px; overflow-x: hidden; }
+    .header { background: #202c33; padding: 15px; border-bottom: 1px solid #313d45; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 1000; }
+    .node-icon { width: 40px; height: 40px; background: var(--wa-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+    .container { padding: 15px; }
+    .app-section { display: none; min-height: 80vh; }
+    #home { display: block; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+    .card { background: var(--wa-bubble); padding: 25px 10px; border-radius: 12px; text-align: center; border: 1px solid #313d45; cursor: pointer; transition: 0.3s; }
+    .card:active { background: #2a3942; transform: scale(0.95); }
+    input, select { width: 100%; padding: 16px; margin: 8px 0; border-radius: 10px; border: none; background: #2a3942; color: white; box-sizing: border-box; font-size: 16px; }
+    .btn-bss { background: var(--wa-teal); color: #0b141a; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .msg-received { background: var(--wa-bubble); padding: 15px; border-radius: 0 12px 12px 12px; margin: 10px 0; border-left: 4px solid var(--wa-teal); white-space: pre-wrap; font-size: 14px; line-height: 1.5; }
+    .nav { position: fixed; bottom: 0; width: 100%; background: #202c33; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #313d45; z-index: 1000; }
+    .nav-item { text-align: center; font-size: 11px; color: #8696a0; flex: 1; cursor: pointer; }
+    .nav-item.active { color: var(--wa-teal); }
+    .typing { color: var(--wa-teal); font-size: 12px; font-style: italic; margin: 5px; }
+  </style>
 </head>
 <body>
+  <div class="header">
+    <div class="node-icon">B</div>
+    <div><strong>BSS Business Group</strong><br><small>⚪ Guest Mode | Active v1.3.0</small></div>
+  </div>
 
-<div class="header">
-    <h1>🛡️ BSS BUSINESS GROUP</h1>
-    <div class="dev-info">SYSTEM ARCHITECT: TAIWO FASHOLA | +234 811 842 8191</div>
-</div>
-
-<div class="main-container">
-    <div class="sidebar">
-        <h3>🔴 MASTER CONTROLS</h3>
-        <button class="nav-btn btn-adm" id="btn-admin-panel" onclick="showSection('admin-panel', this)">Admin Dashboard</button>
-        <button class="nav-btn btn-adm" id="btn-prompt-panel" onclick="showSection('prompt-panel', this)">Prompt Management</button>
-        
-        <h3>🟢 SELLER TOOLS</h3>
-        <button class="nav-btn btn-sel" id="btn-seller-reg" onclick="showSection('seller-reg', this)">New Registration</button>
-        <button class="nav-btn btn-sel" id="btn-inventory" onclick="showSection('inventory', this)">Manage Stock</button>
-        
-        <h3>🔵 MARKETPLACE</h3>
-        <button class="nav-btn btn-buy" id="btn-market" onclick="showSection('market', this)">Browse Products</button>
-        <button class="nav-btn btn-buy" onclick="location.reload()">System Logout</button>
-    </div>
-
-    <div class="content-area">
-        <div class="status-bar">
-            <span>Node: BSS-DEV-001</span>
-            <span><span class="active-dot"></span> Cloud Sync: ACTIVE (30s)</span>
-        </div>
-
-        <div id="admin-panel" class="menu-section">
-            <h2>Admin Master Node</h2>
-            <p>Select a database operation below:</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <button class="nav-btn btn-adm" onclick="alert('Querying bss_bizgroup...')">Verify Pending Sellers</button>
-                <button class="nav-btn btn-adm">Toggle Subscriptions</button>
-                <button class="nav-btn btn-adm">Global User List</button>
-                <button class="nav-btn btn-adm">Transaction Logs</button>
-            </div>
-        </div>
-
-        <div id="prompt-panel" class="menu-section">
-            <h2>JSON Prompt Management</h2>
-            <div class="editor-box">
-                <textarea id="mainEditor">Initializing BSD Gemini Cloud Protocol...</textarea>
-                <br>
-                <button class="nav-btn btn-sel" style="width:auto; padding: 10px 30px;" onclick="saveToCloud()">Push to Gemini Cloud</button>
-            </div>
-        </div>
-
-        <div id="seller-reg" class="menu-section">
-            <h2>Seller Onboarding</h2>
-            <label>Business Name:</label><br>
-            <input type="text" id="bizName" style="width:100%; padding:10px; margin: 10px 0;"><br>
-            <button class="nav-btn btn-sel" onclick="alert('Syncing with bss_bizgroup...')">Begin Verification</button>
-        </div>
-
-        <div id="inventory" class="menu-section">
-            <h2>Manage Stock</h2>
-            <p>Current Inventory levels for <b>Bemagros2</b>:</p>
-            <div style="background:#f4f4f4; padding:15px; border-radius:5px;">
-                <p>📦 <b>Live Broilers:</b> 50 Units Available</p>
-                <button class="nav-btn btn-sel" style="width:auto;">Add New Product</button>
-            </div>
-        </div>
-
-        <div id="market" class="menu-section">
-            <h2>BSS Live Marketplace</h2>
-            <div style="border: 1px solid #ddd; padding: 20px; text-align: center; background: #f9f9f9;">
-                <p>No active listings found in <b>bss_bizgroup</b>.</p>
-                <button class="nav-btn btn-buy" style="width:auto; margin: 0 auto;">Refresh Feed</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    // --- 1. CORE NAVIGATION ENGINE ---
-    function showSection(id, btnElement) {
-        console.log("Navigating to: " + id); // Debugging
-        
-        // Hide all sections using display property directly
-        const sections = document.querySelectorAll('.menu-section');
-        sections.forEach(section => {
-            section.style.display = 'none';
-        });
-
-        // Show the target section
-        const target = document.getElementById(id);
-        if (target) {
-            target.style.display = 'block';
-        }
-
-        // Handle Sidebar UI styling
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-nav'));
-        if (btnElement) {
-            btnElement.classList.add('active-nav');
-        }
-
-        // Load TinyMCE if needed
-        if (id === 'prompt-panel') {
-            initTiny();
-        }
-    }
-
-    // --- 2. TINY CLOUD ENGINE ---
-    let tinyInitialized = false;
-    function initTiny() {
-        if (typeof tinymce !== 'undefined' && !tinymce.get('mainEditor')) {
-            tinymce.init({
-                selector: '#mainEditor',
-                height: 400,
-                plugins: 'code lists table emoticons',
-                toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code emoticons',
-                setup: function (editor) {
-                    editor.on('init', () => { 
-                        console.log("TinyMCE Ready");
-                        editor.setContent("<h3>BSS SYSTEM PROMPT v1.0.1</h3><p>Authorized Admin: Taiwo Fashola</p>");
-                    });
-                }
-            });
-            tinyInitialized = true;
-        }
-    }
-
-    // --- 3. SYSTEM SYNC ---
-    function saveToCloud() {
-        const data = tinymce.get('mainEditor').getContent();
-        console.log("Pushing to BSD Gemini Cloud:", data);
-        alert("Success: Database 'bss_bizgroup' synchronized.");
-    }
-
-    // --- 4. STARTUP HANDLER (GITHUB/REPLIT OPTIMIZED) ---
-    function initializeSystem() {
-        console.log("BSS Master Dashboard: Booting...");
-        const defaultBtn = document.getElementById('btn-admin-panel');
-        showSection('admin-panel', defaultBtn);
-    }
-
-    // Listen for both DOM load and fallback to Window load
-    document.addEventListener('DOMContentLoaded', initializeSystem);
-    if (document.readyState === "complete" || document.readyState === "interactive") {
-        initializeSystem();
-    }
-
-    // Heartbeat Sync
-    setInterval(() => {
-        console.log("Pulse: bss_bizgroup sync active...");
-    }, 30000);
-</script>
-
-</body>
-</html>
+  <div class="container">
+    <div id="home" class="app-section">
+      <div class="msg-received"><strong>Run as a guest. Waiting for input...</strong><br>Welcome to the Marketplace Node. Select a card to
