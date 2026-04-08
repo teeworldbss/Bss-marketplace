@@ -2,167 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BSS Business Group | Master Dashboard</title>
+  <title>BSS Business Group v1.0.0</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    /* ... (Keep your existing CSS, it's perfect) ... */
-    body { font-family: Arial, sans-serif; margin: 0; background: #f4f6f9; color: #333; }
-    header { background: #000; color: #fff; padding: 1rem; text-align: center; border-bottom: 4px solid #b71c1c; }
-    nav { display: flex; justify-content: center; background: #333; position: sticky; top: 0; }
-    nav button { background: none; border: none; color: #fff; padding: 1rem; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
-    nav button:hover { background: #b71c1c; }
-    section { display: none; padding: 2rem; max-width: 800px; margin: auto; }
-    section.active { display: block; }
-    .card { background: #fff; border-radius: 6px; padding: 1rem; margin: 1rem 0; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border-left: 5px solid #27ae60; }
-    form input, form select, form button { display: block; width: 100%; margin: 0.5rem 0; padding: 0.7rem; font-size: 1rem; box-sizing: border-box; }
-    form button { background: #27ae60; color: #fff; border: none; cursor: pointer; font-weight: bold; }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>🛡️ BSS Business Group</h1>
-    <p>Architect: Taiwo Fashola | +234 811 842 8191</p>
+    <h1>BSS Business Group v1.0.0</h1>
+    <p>🛡 SYSTEM ONLINE — PROMO MODE ACTIVE (Registration Fees: OFF)</p>
   </header>
-  
-  <nav>
-    <button onclick="showSection('home')">HOME</button>
-    <button onclick="showSection('register')">REGISTER</button>
-    <button onclick="showSection('login')">LOGIN</button>
-    <button onclick="showSection('marketplace')">MARKET</button>
-    <button onclick="showSection('dashboard')">STATS</button>
-  </nav>
 
-  <section id="home" class="active">
-    <div class="card">
-      <h2>Welcome to BSS Business Group</h2>
-      <p>System connected to <b>bss_bizgroup</b> database.</p>
+  <div class="action-buttons">
+    <button onclick="showSection('register')">Register Free</button>
+    <button onclick="showSection('login')">Sign In</button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" id="searchBar" placeholder="Search products...">
+  </div>
+
+  <div class="features">
+    <div class="feature-card">
+      <span>🛒</span>
+      <div><strong>Marketplace</strong><br>Browse & post product listings. Filter by category, search by name.</div>
     </div>
-  </section>
+    <div class="feature-card">
+      <span>🤖</span>
+      <div><strong>AI Assistant</strong><br>Get instant help from our Gemini-powered marketplace advisor.</div>
+    </div>
+  </div>
 
   <section id="register">
-    <h2>Seller/Buyer Registration</h2>
-    <form id="regForm">
+    <h2>Register</h2>
+    <form onsubmit="registerUser(event)">
       <input id="rName" type="text" placeholder="Full Name" required>
       <input id="rPhone" type="text" placeholder="Phone Number" required>
       <select id="rRole">
         <option value="buyer">Buyer</option>
         <option value="seller">Seller</option>
       </select>
-      <button type="submit">Submit Registration</button>
+      <button type="submit">Submit</button>
     </form>
   </section>
 
   <section id="login">
-    <h2>System Authentication</h2>
-    <form id="loginForm">
+    <h2>Login</h2>
+    <form onsubmit="authenticate(event)">
       <input id="loginUser" type="text" placeholder="Phone Number" required>
       <input id="loginPass" type="password" placeholder="Access Code" required>
-      <button type="submit">Access Node</button>
+      <button type="submit">Login</button>
     </form>
   </section>
 
   <section id="marketplace">
-    <h2>BSS Live Marketplace</h2>
-    <div id="marketListings">Loading inventory...</div>
+    <h2>Marketplace</h2>
+    <div id="marketListings"></div>
+  </section>
+
+  <section id="ai">
+    <h2>AI Assistant</h2>
+    <div class="card">
+      <p>Ask me anything about the marketplace, products, or registration.</p>
+      <input id="aiInput" type="text" placeholder="Type your question...">
+      <button onclick="askAI()">Ask</button>
+      <div id="aiResponse" class="card"></div>
+    </div>
   </section>
 
   <section id="dashboard">
-    <h2>Admin Analytics</h2>
-    <div id="dashboardStats">Loading stats...</div>
+    <h2>Dashboard</h2>
+    <div id="dashboardStats"></div>
   </section>
 
-  <script>
-    // ✅ REPLACE WITH YOUR ACTUAL DEPLOYED API URL (e.g., from Render or Replit)
-    const API_URL = "https://bss-bizgroup-api.your-hosting.com"; 
+  <nav>
+    <button onclick="showSection('home')">🏠 Home</button>
+    <button onclick="showSection('marketplace')">🛒 Market</button>
+    <button onclick="showSection('ai')">🤖 AI Chat</button>
+    <button onclick="showSection('dashboard')">📊 Dashboard</button>
+  </nav>
 
-    // --- 1. Navigation Logic ---
-    function showSection(id) {
-      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      
-      if (id === 'marketplace') loadMarketplace();
-      if (id === 'dashboard') loadDashboard();
-    }
-
-    // --- 2. Registration Logic (API Call) ---
-    document.getElementById('regForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        name: document.getElementById("rName").value,
-        phone: document.getElementById("rPhone").value,
-        role: document.getElementById("rRole").value
-      };
-
-      try {
-        const response = await fetch(`${API_URL}/api/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const result = await response.json();
-        if (result.success) {
-          alert(`✅ Registration Successful! ID: ${result.id}`);
-          showSection('home');
-        }
-      } catch (err) {
-        alert("❌ API Error: Ensure your server is running.");
-      }
-    });
-
-    // --- 3. Login Logic (API Call) ---
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        phone: document.getElementById("loginUser").value,
-        access_code: document.getElementById("loginPass").value
-      };
-
-      try {
-        const response = await fetch(`${API_URL}/api/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const result = await response.json();
-        if (result.authenticated) {
-          alert(`🔴 Welcome, ${result.role}`);
-          showSection('dashboard');
-        } else {
-          alert("❌ Access Denied");
-        }
-      } catch (err) {
-        alert("❌ Auth Server Offline");
-      }
-    });
-
-    // --- 4. Marketplace & Dashboard Loaders ---
-    async function loadMarketplace() {
-      try {
-        const res = await fetch(`${API_URL}/api/marketplace`);
-        const listings = await res.json();
-        document.getElementById("marketListings").innerHTML = listings.map(item => `
-          <div class="card">
-            <strong>📦 ${item.name}</strong><br>
-            Quantity: ${item.quantity} | Seller: ${item.seller}
-          </div>
-        `).join("");
-      } catch (err) {
-        document.getElementById("marketListings").innerText = "Failed to load market data.";
-      }
-    }
-
-    async function loadDashboard() {
-      try {
-        const res = await fetch(`${API_URL}/api/dashboard`);
-        const stats = await res.json();
-        document.getElementById("dashboardStats").innerHTML = `
-          <div class="card">👥 Total Users: ${stats.users}</div>
-          <div class="card">💰 Transactions: ${stats.transactions}</div>
-        `;
-      } catch (err) {
-        document.getElementById("dashboardStats").innerText = "Failed to load stats.";
-      }
-    }
-  </script>
+  <script type="module" src="firebase.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
