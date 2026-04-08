@@ -1,0 +1,45 @@
+import { db } from "./firebase.js";
+import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+function showSection(id) {
+  document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+  const target = document.getElementById(id);
+  if (target) target.classList.add("active");
+}
+
+async function registerUser(e) {
+  e.preventDefault();
+  await addDoc(collection(db, "bss_registrations"), {
+    name: document.getElementById("rName").value,
+    phone: document.getElementById("rPhone").value,
+    role: document.getElementById("rRole").value,
+    status: "pending",
+    created_at: new Date()
+  });
+  alert("✅ Registration saved.");
+  showSection("home");
+}
+
+async function authenticate(e) {
+  e.preventDefault();
+  const user = document.getElementById("loginUser").value;
+  const pass = document.getElementById("loginPass").value;
+  if (user === "08118428191" && pass === "mastercode") {
+    alert("🔴 Master Node Access Granted");
+    showSection("dashboard");
+    loadDashboard();
+  } else {
+    alert("❌ Invalid credentials");
+  }
+}
+
+async function loadMarketplace() {
+  const snapshot = await getDocs(collection(db, "marketplace"));
+  const listings = snapshot.docs.map(doc => doc.data());
+  document.getElementById("marketListings").innerHTML =
+    listings.map(item => `<div class="card">💬 ${item.name} — Vendor: ${item.vendor}</div>`).join("");
+}
+loadMarketplace();
+
+async function loadDashboard() {
+  const snapshot = await getDocs(collection(db
