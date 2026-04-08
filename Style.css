@@ -1,0 +1,51 @@
+body { font-family: 'Segoe UI', sans-serif; margin:0; background:#e5ddd5; color:#333; }
+header { background:#075e54; color:#fff; padding:1rem; text-align:center; border-bottom:2px solid #128c7e; }
+header h1 { margin:0; font-size:1.2rem; }
+header p { margin:0.5rem 0 0; font-size:0.9rem; color:#25d366; }
+
+.action-buttons { display:flex; justify-content:space-around; margin:1rem; }
+.action-buttons button {
+  flex:1; margin:0.5rem; padding:1rem;
+  background:#25d366; color:#fff; border:none; border-radius:20px;
+  font-size:1rem; cursor:pointer; font-weight:bold;
+}
+.action-buttons button:hover { background:#128c7e; }
+
+.search-bar { padding:1rem; text-align:center; }
+.search-bar input {
+  width:90%; padding:0.5rem; border-radius:20px;
+  border:1px solid #128c7e; outline:none;
+}
+
+.features { padding:1rem; }
+.feature-card {
+  display:flex; align-items:center;
+  background:#dcf8c6; border-radius:15px; padding:1rem; margin:0.5rem 0;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+.feature-card span { font-size:1.5rem; margin-right:1rem; }
+
+section { display:none; padding:2rem; }
+section.active { display:block; }
+
+nav {
+  position:fixed; bottom:0; left:0; right:0;
+  display:flex; justify-content:space-around;
+  background:#075e54; color:#fff; border-top:2px solid #128c7e;
+}
+nav button {
+  flex:1; background:none; border:none; color:#fff;
+  padding:0.8rem; font-size:0.9rem; cursor:pointer; font-weight:bold;
+}
+nav button:hover { background:#128c7e; }
+
+.card {
+  background:#fff; border-radius:15px; padding:1rem; margin:1rem 0;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+form input, form select, form button {
+  width:100%; margin:0.5rem 0; padding:0.5rem; border-radius:10px;
+  border:1px solid #128c7e;
+}
+form button { background:#25d366; color:#fff; border:none; cursor:pointer; font-weight:bold; }
+form button:hover { background:#128c7e; }
