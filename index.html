@@ -69,6 +69,11 @@
   </div>
 
   <!-- Sections -->
+  <section id="home" class="active">
+    <h2>Welcome</h2>
+    <p>Use the buttons above or the bottom menu to navigate.</p>
+  </section>
+
   <section id="register">
     <h2>Register</h2>
     <form onsubmit="registerUser(event)">
@@ -125,7 +130,7 @@
     import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyCkzvVZrXyQkYwQkXzYwQkYwQkYwQkYwQk",  // ✅ replaced with your pasted key
+      apiKey: "YOUR_API_KEY",  // replace with your actual key
       authDomain: "bss-business-group.firebaseapp.com",
       projectId: "bss-business-group",
       storageBucket: "bss-business-group.appspot.com",
